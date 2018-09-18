@@ -32,8 +32,40 @@ class App extends Component {
   let person1 = this.state.person;
   let name1 = this.state.name;
   let email1 = this.state.email;
-  if(name1.length!==0&&email1.length!==0){
-  person1.push({name:name1,email:email1});
+  let n = this.refs.name.value;
+  let em = this.refs.email.value;
+  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  // if(name1.length!==0&&email1.length!==0){
+  // person1.push({name:name1,email:email1});
+  // this.setState({person1:person1,
+  //   valid:false
+  // });
+  // console.log(person1);
+  //   //this.setState({names: this.state.name});
+  //   //this.state.person.push(this.state.name);
+  //   console.log(this.state.name);
+  // }
+  if(n.length===0){
+    this.setState({
+      error:'Name is required',
+      valid:true
+    });
+  }
+  else if(em.length===0){
+    this.setState({
+      error:'Email is required',
+      valid:true
+    });
+  }
+  else if(!em.match(mailformat))
+  {
+    this.setState({
+      error:'Email is invalid',
+      valid:true
+    });
+  }
+  else{
+    person1.push({name:name1,email:email1});
   this.setState({person1:person1,
     valid:false
   });
@@ -41,12 +73,6 @@ class App extends Component {
     //this.setState({names: this.state.name});
     //this.state.person.push(this.state.name);
     console.log(this.state.name);
-  }
-  else{
-    this.setState({
-      error:'All the fields are required',
-      valid:true
-    });
   }
  }
 
@@ -80,11 +106,11 @@ class App extends Component {
            </div>
            <div className="form-group" >
            <label>Name</label>
-             <input type="text" refs="name" className="form-control" name="name" onChange={this.handleChange}/>
+             <input type="text" ref="name" className="form-control" name="name" onChange={this.handleChange}/>
            </div>
            <div className="form-group">
            <label>Email</label>
-             <input type="email" refs="email" className="form-control" name="email" onChange={this.handleChange}/>
+             <input type="email" ref="email" className="form-control" name="email" onChange={this.handleChange}/>
            </div>
            <center>
            <button type="button" class="btn btn-primary" onClick={this.updateState}>Submit</button>
