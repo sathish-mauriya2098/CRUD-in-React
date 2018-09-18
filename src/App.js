@@ -9,7 +9,8 @@ class App extends Component {
       person:[],
        name: '',
        email:'',
-       index:0
+       index:0,
+       valid:false
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateState = this.updateState.bind(this);
@@ -31,12 +32,22 @@ class App extends Component {
   let person1 = this.state.person;
   let name1 = this.state.name;
   let email1 = this.state.email;
+  if(name1.length!==0&&email1.length!==0){
   person1.push({name:name1,email:email1});
-  this.setState({person1:person1});
+  this.setState({person1:person1,
+    valid:false
+  });
   console.log(person1);
     //this.setState({names: this.state.name});
     //this.state.person.push(this.state.name);
     console.log(this.state.name);
+  }
+  else{
+    this.setState({
+      error:'All the fields are required',
+      valid:true
+    });
+  }
  }
 
  deleteData=(index)=>{
@@ -46,6 +57,16 @@ class App extends Component {
   });
 
 }
+
+// editData=(index)=>{
+//   let data = this.state.person[index];
+//     this.refs.name.value = data.name;
+//     this.refs.email.value = data.email;
+
+//     this.setState({ editc: 1, newVal: index });
+
+    
+// }
  
   render() {
     return (
@@ -53,13 +74,17 @@ class App extends Component {
          <div className="App">
          <div className="col-sm-6 offset-sm-3 fm">
          <form>
+           <br/>
+           <div>
+           {this.state.valid?<div className="alert alert-success">{this.state.error}</div>:null}
+           </div>
            <div className="form-group" >
            <label>Name</label>
-             <input type="text" className="form-control" name="name" onChange={this.handleChange}/>
+             <input type="text" refs="name" className="form-control" name="name" onChange={this.handleChange}/>
            </div>
            <div className="form-group">
            <label>Email</label>
-             <input type="email" className="form-control" name="email" onChange={this.handleChange}/>
+             <input type="email" refs="email" className="form-control" name="email" onChange={this.handleChange}/>
            </div>
            <center>
            <button type="button" class="btn btn-primary" onClick={this.updateState}>Submit</button>
@@ -78,6 +103,7 @@ class App extends Component {
                   {this.state.person.map((persons, i) => <TableRow key = {i} 
                      person = {persons} 
                      delete={()=>this.deleteData(i)}
+                     edit={()=>this.editData(i) }
                      />)}
                </tbody>
             </table>
@@ -92,7 +118,7 @@ class TableRow extends React.Component {
         <tr>
            <td>{this.props.person.name}</td>
            <td>{this.props.person.email}</td>
-           <td><button type="button" className="btn btn-success">EDIT</button> <button type="button" className="btn btn-danger" onClick={this.props.delete}>DELETE</button></td>
+           <td><button type="button" className="btn btn-success" onClick={this.props.edit}>EDIT</button> <button type="button" className="btn btn-danger" onClick={this.props.delete}>DELETE</button></td>
         </tr>
      );
   }
